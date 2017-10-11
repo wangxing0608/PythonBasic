@@ -2,9 +2,10 @@ from xml.sax.handler import ContentHandler
 from xml.sax import parse
 import os
 
-class Dispatcher():
 
-    def dispatcher(self, prefix, name, attrs=None):
+class Dispatcher:
+
+    def dispatch(self, prefix, name, attrs=None):
         mname = prefix + name.capitalize()
         dname = 'default' + prefix.capitalize()
         method = getattr(self, mname, None)
@@ -19,10 +20,10 @@ class Dispatcher():
             method(*args)
 
     def startElement(self, name, attrs):
-        self.dispatcher('start', name, attrs)
+        self.dispatch('start', name, attrs)
 
     def endElement(self, name):
-        self.dispatcher('end', name)
+        self.dispatch('end', name)
 
 
 class WebsiteConstructor(Dispatcher, ContentHandler):
@@ -64,7 +65,7 @@ class WebsiteConstructor(Dispatcher, ContentHandler):
         filename = os.path.join(*self.directory+[attrs['name']+'.html'])
         self.out = open(filename, 'w')
         self.writeHeader(attrs['title'])
-        self.passthrough =True
+        self.passthrough = True
 
     def endPage(self):
         self.passthrough = False
